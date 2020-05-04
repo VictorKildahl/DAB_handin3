@@ -10,12 +10,14 @@ namespace DAB_Handin3.Services
     public class PostService
     {
         private readonly IMongoCollection<Post> _post;
+        private readonly IMongoCollection<User> _user;
 
         public PostService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
             _post = database.GetCollection<Post>(settings.PostsCollectionName);
+            _user = database.GetCollection<User>(settings.UsersCollectionName);
         }
 
         public List<Post> Get() => _post.Find(post => true).ToList();
@@ -24,7 +26,16 @@ namespace DAB_Handin3.Services
 
         public Post CreatePost(Post post)
         {
+            var user = _user.Find(user => user.UserName == post.Author).FirstOrDefault();
+
+            if (user.PostsId == null)
+            {
+                user.PostsId = new List<string>();
+            }
             _post.InsertOne(post);
+            user.PostsId.Add(post.Id);
+            _user.ReplaceOne(user => user.UserName == post.Author, user);
+
             return post;
         }
 
@@ -39,6 +50,16 @@ namespace DAB_Handin3.Services
 
         public void Remove(string id)
         {
+            var post = _post.Find(post => post.Id == id).FirstOrDefault();
+            var user = _user.Find(user => user.UserName == post.Author).FirstOrDefault();
+
+            if (user.PostsId == null)
+            {
+                user.PostsId = new List<string>();
+            }
+
+            user.PostsId.Remove(post.Id);
+            _user.ReplaceOne(user => user.UserName == post.Author, user);
             _post.DeleteOne(post => post.Id == id);
         }
     }

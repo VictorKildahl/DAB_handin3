@@ -39,6 +39,7 @@ namespace DAB_Handin3
             services.AddSingleton<PostService>();
             services.AddSingleton<CommentService>();
             services.AddSingleton<CircleService>();
+            services.AddSingleton<FeedService>();
 
             services.AddControllers();
         }

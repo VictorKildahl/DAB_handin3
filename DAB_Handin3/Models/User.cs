@@ -17,7 +17,9 @@ namespace DAB_Handin3.Models
         public string LastName { get; set; }
         public string Gender { get; set; }
         public int Age { get; set; }
-        public List<string> BlockedUsernames { get; set; }
+        public bool Login { get; set; }
+        public string Password { get; set; }
+        public List<User> BlockedUsernames { get; set; }
         public List<string> PostsId { get; set; }
         public List<string> Circles { get; set; }
         public List<User> FollowUser { get; set; }

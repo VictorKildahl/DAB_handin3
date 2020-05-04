@@ -79,13 +79,26 @@ namespace DAB_Handin3.Controllers
         }
 
 
-        // POST: 
-        [HttpPost("{userName}/{follow}")]
+        // POST: /api/user/follow/UserName/FollowName
+        [HttpPost("follow/{userName}/{follow}")]
         public void follow_user(string userName, string follow)
         {
             _userService.follow_user(userName, follow);
         }
 
+        // POST: /api/user/block/UserName/BlockName
+        [HttpPost("block/{userName}/{block}")]
+        public void block_user(string userName, string block)
+        {
+            _userService.block_user(userName, block);
+        }
+
+        // POST: /api/user/login/UserName/password
+        [HttpPost("login/{userName}/{password}")]
+        public void Login(string userName, string password)
+        {
+            _userService.Login(userName, password);
+        }
 
     }
 }

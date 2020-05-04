@@ -58,6 +58,40 @@ namespace DAB_Handin3.Services
             _user.ReplaceOne(user => user.UserName == userName, user);
         }
 
+        public void block_user(string userName, string block)
+        {
+            //var filter = Builders<User>.Filter.Eq("UserName", userName);
+            //var blockUser = _user.Find(filter).FirstOrDefault();
+
+            var user = _user.Find(user => user.UserName == userName).FirstOrDefault();
+            var userBlock = _user.Find(user => user.UserName == block).FirstOrDefault();
+
+            if (user.BlockedUsernames == null)
+            {
+                user.BlockedUsernames = new List<User>();
+            }
+
+            userBlock.BlockedUsernames = null;
+            userBlock.FollowUser = null;
+
+            user.BlockedUsernames.Add(userBlock);
+
+            _user.ReplaceOne(user => user.UserName == userName, user);
+        }
+
+
+        public void Login(string userName, string password)
+        {
+            var user = _user.Find(user => user.UserName == userName).FirstOrDefault();
+
+            if (user.Password == password)
+            {
+                user.Login = true;
+            }
+
+            _user.ReplaceOne(user => user.UserName == userName, user);
+        }
+
     }
 }
 
