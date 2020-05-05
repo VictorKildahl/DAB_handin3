@@ -78,18 +78,28 @@ namespace DAB_Handin3.Services
             };
 
             _post.InsertOne(post);
+
             var findpost = _post.Find(p => p.Author == post.Author && p.Text == post.Text).FirstOrDefault();
+           
             var cirle = _circle.Find(circle => circle.CircleName == circlename).FirstOrDefault();
 
             if (cirle != null)
             {
                 var finduser = _user.Find(user => user.UserName == userName).FirstOrDefault();
-                finduser.PostsId.Add(findpost.Id);
 
-                _user.ReplaceOne(user => user.UserName == finduser.UserName, finduser);
-                cirle.Users.Add(finduser);
-                cirle.PostsId.Add(findpost.Id);
-                _circle.ReplaceOne(circle => circle.CircleName == circlename, cirle);
+                if (cirle.Users.Contains(finduser))
+                {
+                    finduser.PostsId.Add(findpost.Id);
+
+                    _user.ReplaceOne(user => user.UserName == finduser.UserName, finduser);
+
+                    //cirle.Users.Add(finduser);
+
+                    cirle.PostsId.Add(findpost.Id);
+                    _circle.ReplaceOne(circle => circle.CircleName == circlename, cirle);
+                }
+
+
             }
         }
 
