@@ -49,14 +49,14 @@ namespace DAB_Handin3.Controllers
         }
 
         // PUT: api/Post/5
-        [HttpPut("{text}")]
-        public IActionResult PutComment(string text, [FromBody] Comment comment)
+        [HttpPut("{id}")]
+        public IActionResult PutComment(string id, [FromBody] Comment comment)
         {
-            var user = _postService.Get(text);
+            var user = _postService.Get(id);
             if (user == null)
                 return NotFound();
 
-            _postService.Update(text, comment);
+            _postService.Update(id, comment);
             return Ok();
         }
 
@@ -70,6 +70,13 @@ namespace DAB_Handin3.Controllers
 
             _postService.Remove(id);
             return Ok();
+        }
+
+        // POST: api/Post/circle/userName/circleName
+        [HttpPost("circle/{userName}/{circlename}")]
+        public void create_circle_post(string userName, string circlename, [FromBody] string content)
+        {
+            _postService.create_circle_post(userName, content, circlename);
         }
     }
 }

@@ -24,13 +24,6 @@ namespace DAB_Handin3.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(string id, [FromBody] Comment commentIn)
         {
-            var comment = _commentService.Get(id);
-
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
             _commentService.Update(id, commentIn);
 
             return NoContent();

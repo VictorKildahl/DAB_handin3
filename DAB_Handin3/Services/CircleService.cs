@@ -38,6 +38,12 @@ namespace DAB_Handin3.Services
         public void Update(string id, User user)
         {
             var newCircle = _circle.Find(circle => circle.Id == id).FirstOrDefault();
+
+            if (newCircle.Users == null)
+            {
+                newCircle.Users = new List<User>();
+            }
+
             newCircle.Users.Add(user);
             _circle.ReplaceOne(circle => circle.Id == id, newCircle);
         }

@@ -21,9 +21,7 @@ namespace DAB_Handin3.Services
             _comment = database.GetCollection<Comment>(settings.CommentsCollectionName);
         }
 
-        public Comment Get(string id) => _comment.Find(comment => comment.Id == id).FirstOrDefault();
-
-        public void Update(string id, Comment commentIn)// =>_comment.ReplaceOne(comment => comment.Id == id, commentIn);
+        public void Update(string id, Comment commentIn)
         {
             var post = _post.Find(post => post.Id == id).FirstOrDefault();
 
@@ -32,9 +30,9 @@ namespace DAB_Handin3.Services
                 post.Comments = new List<Comment>();
             }
 
-            _comment.ReplaceOne(comment => comment.Id == id, commentIn);
+            post.Comments.Add(commentIn);
+            _post.ReplaceOne(post => post.Id == id, post);
         }
-
-}
+    }
 }
 
