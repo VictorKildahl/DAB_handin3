@@ -60,21 +60,18 @@ namespace DAB_Handin3.Services
 
         public void block_user(string userName, string block)
         {
-            //var filter = Builders<User>.Filter.Eq("UserName", userName);
-            //var blockUser = _user.Find(filter).FirstOrDefault();
-
             var user = _user.Find(user => user.UserName == userName).FirstOrDefault();
             var userBlock = _user.Find(user => user.UserName == block).FirstOrDefault();
 
             if (user.BlockedUsernames == null)
             {
-                user.BlockedUsernames = new List<User>();
+                user.BlockedUsernames = new List<string>();
             }
 
             userBlock.BlockedUsernames = null;
             userBlock.FollowUser = null;
 
-            user.BlockedUsernames.Add(userBlock);
+            user.BlockedUsernames.Add(userBlock.UserName);
 
             _user.ReplaceOne(user => user.UserName == userName, user);
         }

@@ -24,15 +24,15 @@ namespace DAB_Handin3.Services
         }
 
 
-        public List<Post> Feed(string userName)
+        public List<Post> Feed(string logged_in_userName)
         {
-            var user = _user.Find(user => user.UserName == userName).FirstOrDefault();
+            var user = _user.Find(user => user.UserName == logged_in_userName).FirstOrDefault();
 
             List<Post> myFeedPosts = new List<Post>();
 
             if (user.Login == true)
             {
-                var test = _post.Find(post => post.Author == userName).ToList();
+                var test = _post.Find(post => post.Author == logged_in_userName).ToList();
 
                 foreach (var posts in test)
                 {
@@ -43,16 +43,11 @@ namespace DAB_Handin3.Services
                 {
                     foreach (var person in user.FollowUser)
                     {
-                        //var p = _user.Find(u => u.UserName == person.UserName).FirstOrDefault();
-
-                       // if (user.FollowUser.Contains(person)) //person != null && user.BlockedUsernames.Contains(person) && person.PostsId != null
-                        
-                            foreach (var id in person.PostsId)
-                            {
-                                var followerPosts = _post.Find(p => p.Id == id).FirstOrDefault();
-                                myFeedPosts.Add(followerPosts);
-                            }
-                        
+                        foreach (var id in person.PostsId)
+                        {
+                            var followerPosts = _post.Find(p => p.Id == id).FirstOrDefault();
+                            myFeedPosts.Add(followerPosts);
+                        }
                     }
                 }
 

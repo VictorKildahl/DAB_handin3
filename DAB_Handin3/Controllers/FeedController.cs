@@ -21,11 +21,11 @@ namespace DAB_Handin3.Controllers
         }
 
 
-        // GET: api/Feed/userName
-        [HttpGet("{userName}")]
-        public List<Post> Feed(string userName)
+        // GET: api/Feed/logged_in_userName
+        [HttpGet("{logged_in_userName}")]
+        public ActionResult<List<Post>> Feed(string logged_in_userName)
         {
-            return _feedService.Feed(userName);
+            return _feedService.Feed(logged_in_userName);
         }
 
 
