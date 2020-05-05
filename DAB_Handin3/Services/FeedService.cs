@@ -43,6 +43,11 @@ namespace DAB_Handin3.Services
                 {
                     foreach (var person in user.FollowUser)
                     {
+                        //if (person.PostsId == null)
+                        //{
+                        //    person.PostsId = new List<string>();
+                        //}
+
                         foreach (var id in person.PostsId)
                         {
                             var followerPosts = _post.Find(p => p.Id == id).FirstOrDefault();
@@ -55,7 +60,7 @@ namespace DAB_Handin3.Services
                 {
                     foreach (var circle in user.Circles)
                     {
-                        var myCircles = _circle.Find(c => c.CircleName == circle).FirstOrDefault();
+                        var myCircles = _circle.Find(c => c.Id == circle).FirstOrDefault();
 
                         foreach (var id in myCircles.PostsId)
                         {

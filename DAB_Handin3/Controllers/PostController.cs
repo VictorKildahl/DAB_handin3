@@ -74,9 +74,9 @@ namespace DAB_Handin3.Controllers
 
         // POST: api/Post/circle/userName/circleName
         [HttpPost("circle/{userName}/{circlename}")]
-        public void create_circle_post(string userName, string circlename, [FromBody] string content)
+        public void create_circle_post(string userName, string circlename, [FromBody] Post post)
         {
-            _postService.create_circle_post(userName, content, circlename);
+            _postService.create_circle_post(userName, circlename, post);
         }
     }
 }

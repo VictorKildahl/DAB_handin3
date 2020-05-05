@@ -67,43 +67,31 @@ namespace DAB_Handin3.Services
         }
 
 
-        public void create_circle_post(string userName, string content, string circlename)
+        public void create_circle_post(string userName, string circlename, Post post)
         {
-            var post = new Post
+            var cirle = _circle.Find(circle => circle.CircleName == circlename).FirstOrDefault();
+            var user = _user.Find(user => user.UserName == post.Author).FirstOrDefault();
+
+            if (cirle.PostsId == null)
             {
-                Text = content,
-                Author = userName,
-                //Time = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss"),
-                Comments = new List<Comment>()
-            };
+                cirle.PostsId = new List<string>();
+            }
+
+          
+            if (user.PostsId == null)
+            {
+                user.PostsId = new List<string>();
+            }
 
             _post.InsertOne(post);
+            user.PostsId.Add(post.Id);
+            _user.ReplaceOne(user => user.UserName == post.Author, user);
 
-            var findpost = _post.Find(p => p.Author == post.Author && p.Text == post.Text).FirstOrDefault();
-           
-            var cirle = _circle.Find(circle => circle.CircleName == circlename).FirstOrDefault();
-
-            if (cirle != null)
-            {
-                var finduser = _user.Find(user => user.UserName == userName).FirstOrDefault();
-
-                if (cirle.Users.Contains(finduser))
-                {
-                    finduser.PostsId.Add(findpost.Id);
-
-                    _user.ReplaceOne(user => user.UserName == finduser.UserName, finduser);
-
-                    //cirle.Users.Add(finduser);
-
-                    cirle.PostsId.Add(findpost.Id);
-                    _circle.ReplaceOne(circle => circle.CircleName == circlename, cirle);
-                }
-
-
-            }
+            cirle.PostsId.Add(post.Id);
+            _circle.ReplaceOne(circle => circle.CircleName == circlename, cirle);
+                
+            
         }
-
-
     }
 }
 
