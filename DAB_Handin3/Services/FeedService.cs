@@ -43,15 +43,19 @@ namespace DAB_Handin3.Services
                 {
                     foreach (var person in user.FollowUser)
                     {
-                        //if (person.PostsId == null)
-                        //{
-                        //    person.PostsId = new List<string>();
-                        //}
+                        if (person.PostsId == null)
+                        {
+                            person.PostsId = new List<string>();
+                        }
 
                         foreach (var id in person.PostsId)
                         {
                             var followerPosts = _post.Find(p => p.Id == id).FirstOrDefault();
-                            myFeedPosts.Add(followerPosts);
+
+                            if (followerPosts.CirclePost == false)
+                            {
+                                myFeedPosts.Add(followerPosts);
+                            }
                         }
                     }
                 }

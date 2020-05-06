@@ -30,64 +30,49 @@ namespace DAB_Handin3.Services
             var user = _user.Find(user => user.UserName == userName).FirstOrDefault();
             var guest = _user.Find(guest => guest.UserName == guestName).FirstOrDefault();
 
-            List<Post> myWallPosts = new List<Post>();
-
-            var userposts = _post.Find(post => post.Author == userName).ToList();
-
-            foreach (var posts in userposts)
+            if (user.BlockedUsernames == null)
             {
-                myWallPosts.Add(posts);
+                user.BlockedUsernames = new List<string>();
             }
 
-            //if (user.Circles != null)
-            //{
-            //    foreach (var guestcircleid in guest.Circles)
-            //    {
-            //        foreach (var usercircleid in user.Circles)
-            //        {
-            //            if (guestcircleid == usercircleid)
-            //            {
-            //                var userCirclePosts = _circle.Find(c => c.PostsId == usercircleid).FirstOrDefault();
-            //            }
+            if (!user.BlockedUsernames.Contains(guest.UserName))
+            {
+                List<Post> myWallPosts = new List<Post>();
 
+                var userposts = _post.Find(post => post.Author == userName).ToList();
 
+                foreach (var posts in userposts)
+                {
+                    if (posts.CirclePost == false)
+                    {
+                        myWallPosts.Add(posts);
+                    }
+                }
 
-            //            var myCircles = _circle.Find(c => c.Id == circle).FirstOrDefault();
-            //            var post = _post.Find(p => p.Id == id).FirstOrDefault();
-            //            myFeedPosts.Add(post);
-            //        }
-            //    }
-            //}
+                if (user.Circles != null)
+                {
+                    foreach (var guestcircleid in guest.Circles)
+                    {
+                        foreach (var usercircleid in user.Circles)
+                        {
+                            if (guestcircleid == usercircleid)
+                            {
+                                var usercircles = _circle.Find(c => c.Id == usercircleid).FirstOrDefault();
 
+                                foreach (var id in usercircles.PostsId)
+                                {
+                                    var uposts = _post.Find(p => p.Id == id).FirstOrDefault();
+                                    myWallPosts.Add(uposts);
+                                }
+                            }
+                        }
+                    }
+                }
 
+                return myWallPosts;
+            }
 
-
-
-            return myWallPosts;
-
-
-
-
-
-
-
-
-            //if (user.BlockedUsernames == null)
-            //{
-            //    user.BlockedUsernames = new List<string>();
-            //}
-
-
-            //if (!user.BlockedUsernames.Contains(guestName))
-            //{
-            //    foreach (var id in user.PostsId)
-            //    {
-            //        myWallPosts.Add(_post.Find(p => p.Id == id).FirstOrDefault());
-            //    }
-
-            //    return myWallPosts;
-            //}
-            //return null;
+            return null;
         }
     }
 }
